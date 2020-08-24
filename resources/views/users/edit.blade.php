@@ -36,6 +36,17 @@
                             <label>{{ __('Password Confirmation') }}</label>
                             <input type="password" class="form-control" name="password_confirmation">
                         </div>
+                        <div class="form-group">
+                            <label>{{ __('Roles') }}</label>
+                            <select multiple class="form-control"  name="roles[]">
+                                @foreach($roles as $role)
+                                <option value="{{ $role->id }}" {{ !in_array($role->id, old('roles', $user->roles()->pluck('roles.id')->toArray())) ?: 'selected' }}>{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('roles')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

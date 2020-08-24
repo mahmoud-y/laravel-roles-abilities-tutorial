@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -36,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view('users.create', ['roles' => Role::get()]);
     }
 
     /**
@@ -51,6 +52,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'roles' => ['nullable'],
         ]);
 
         $user = User::create([
@@ -58,6 +60,9 @@ class UserController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
         ]);
+        if ($request->filled('roles')) {
+            $user->roles()->attach($validatedData['roles']);
+        }
 
         return redirect()->route('users.index');
     }
@@ -70,7 +75,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.show', ['user' => $user]);
+        return view('users.show', ['roles' => Role::get(), 'user' => $user]);
     }
 
     /**
@@ -81,7 +86,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', ['roles' => Role::get(), 'user' => $user]);
     }
 
     /**
@@ -97,6 +102,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'roles' => ['nullable'],
         ]);
 
         $user->fill([
@@ -108,6 +114,11 @@ class UserController extends Controller
         }
         if ($user->isDirty()) {
             $user->save();
+        }
+        if ($request->filled('roles')) {
+            $user->roles()->sync($validatedData['roles']);
+        } elseif ($user->roles()->exists()) {
+            $user->roles()->detach();
         }
 
         return redirect()->route('users.index');
@@ -121,6 +132,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $user->roles()->detach();
         $user->delete();
 
         return redirect()->route('users.index');

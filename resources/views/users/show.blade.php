@@ -16,6 +16,14 @@
                         <label>{{ __('Email') }}</label>
                         <input type="email" class="form-control-plaintext" value="{{ $user->email }}">
                     </div>
+                    <div class="form-group">
+                        <label>{{ __('Roles') }}</label>
+                        <select multiple class="form-control" disabled>
+                            @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ !in_array($role->id, old('roles', $user->roles()->pluck('roles.id')->toArray())) ?: 'selected' }}>{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
