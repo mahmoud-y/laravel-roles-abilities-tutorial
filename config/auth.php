@@ -114,4 +114,18 @@ return [
 
     'password_timeout' => 10800,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Super User Credentials
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set super user credentials
+    |
+    */
+
+    'super_user' => [
+        'email' => env('AUTH_SUPER_USER_EMAIL', 'super@example.com'),
+        'password' => env('AUTH_SUPER_USER_PASSWORD', 'secret'),
+    ],
+
 ];

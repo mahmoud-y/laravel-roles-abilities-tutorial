@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Role;
+use App\Ability;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -34,7 +35,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create');
+        return view('roles.create', ['abilities' => Ability::get()]);
     }
 
     /**
@@ -47,11 +48,13 @@ class RoleController extends Controller
     {
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'abilities' => ['required'],
         ]);
 
         $role = Role::create([
             'name' => $validatedData['name'],
         ]);
+        $role->abilities()->attach($validatedData['abilities']);
         
         return redirect()->route('roles.index');
     }
@@ -64,7 +67,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        return view('roles.show', ['role' => $role]);
+        return view('roles.show', ['abilities' => Ability::get(), 'role' => $role]);
     }
 
     /**
@@ -75,7 +78,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('roles.edit', ['role' => $role]);
+        return view('roles.edit', ['abilities' => Ability::get(), 'role' => $role]);
     }
 
     /**
@@ -89,6 +92,7 @@ class RoleController extends Controller
     {
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'abilities' => ['required'],
         ]);
 
         $role->fill([
@@ -97,6 +101,7 @@ class RoleController extends Controller
         if ($role->isDirty()) {
             $role->save();
         }
+        $role->abilities()->sync($validatedData['abilities']);
         
         return redirect()->route('roles.index');
     }
@@ -109,6 +114,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $role->abilities()->detach();
         $role->users()->detach();
         $role->delete();
         

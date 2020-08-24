@@ -18,6 +18,17 @@
                             <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label>{{ __('Abilities') }}</label>
+                            <select multiple class="form-control" name="abilities[]">
+                                @foreach($abilities as $ability)
+                                <option value="{{ $ability->id }}" {{ !in_array($ability->id, old('abilities', $role->abilities()->pluck('abilities.id')->toArray())) ?: 'selected' }}>{{ $ability->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('abilities')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

@@ -26,5 +26,17 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+
+        Gate::before(function ($user, $ability) {
+            if ($user->super) {
+                return true;
+            } else {
+                return $user->roles()
+                    ->join('ability_role', 'roles.id', '=', 'ability_role.role_id')
+                    ->join('abilities', 'ability_role.ability_id', '=', 'abilities.id')
+                    ->where('abilities.name', $ability)
+                    ->exists();
+            }
+        });
     }
 }

@@ -49,12 +49,16 @@
                                 </li>
                             @endif
                         @else
+                            @can('view-any-user')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
                             </li>
+                            @endcan
+                            @can('view-any-role')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('roles.index') }}">{{ __('Roles') }}</a>
                             </li>
+                            @endcan
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>

@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.index', ['users' => User::get()]);
+        return view('users.index', ['users' => User::whereNull('super')->get()]);
     }
 
     /**
