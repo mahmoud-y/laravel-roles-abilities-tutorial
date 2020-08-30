@@ -27,6 +27,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('view-any-user');
+
         return view('users.index', ['users' => User::whereNull('super')->get()]);
     }
 
@@ -37,6 +39,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create-user');
+
         return view('users.create', ['roles' => Role::get()]);
     }
 
@@ -48,6 +52,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create-user');
+
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -75,6 +81,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view-user');
+
         return view('users.show', ['roles' => Role::get(), 'user' => $user]);
     }
 
@@ -86,6 +94,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('update-user');
+
         return view('users.edit', ['roles' => Role::get(), 'user' => $user]);
     }
 
@@ -98,6 +108,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update-user');
+
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
@@ -132,6 +144,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete-user');
+
         $user->roles()->detach();
         $user->delete();
 

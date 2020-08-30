@@ -34,7 +34,7 @@
                                 @canany(['view-user', 'update-user', 'delete-user'])
                                 <td>
                                     @can('view-user')
-                                    <a href="{{ route('users.show', ['user' => $user]) }}" class="btn btn-primary">{{ __('Show') }}</a>
+                                    <a href="{{ route('users.show', ['user' => $user]) }}" class="btn btn-primary">{{ __('View') }}</a>
                                     @endcan
                                     @can('update-user')
                                     <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-primary">{{ __('Edit') }}</a>

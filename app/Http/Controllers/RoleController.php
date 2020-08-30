@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Role;
 use App\Ability;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -25,6 +26,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->authorize('view-any-role');
+        
         return view('roles.index', ['roles' => Role::get()]);
     }
 
@@ -35,6 +38,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create-role');
+        
         return view('roles.create', ['abilities' => Ability::get()]);
     }
 
@@ -46,8 +51,10 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create-role');
+        
         $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:roles'],
             'abilities' => ['required'],
         ]);
 
@@ -67,6 +74,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $this->authorize('view-role');
+        
         return view('roles.show', ['abilities' => Ability::get(), 'role' => $role]);
     }
 
@@ -78,6 +87,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $this->authorize('update-role');
+        
         return view('roles.edit', ['abilities' => Ability::get(), 'role' => $role]);
     }
 
@@ -90,8 +101,10 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        $this->authorize('update-role');
+        
         $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', Rule::unique('roles')->ignore($role->id)],
             'abilities' => ['required'],
         ]);
 
@@ -114,6 +127,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete-role');
+        
         $role->abilities()->detach();
         $role->users()->detach();
         $role->delete();

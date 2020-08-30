@@ -32,7 +32,7 @@
                                 @canany(['view-role', 'update-role', 'delete-role'])
                                 <td>
                                     @can('view-role')
-                                    <a href="{{ route('roles.show', ['role' => $role]) }}" class="btn btn-primary">{{ __('Show') }}</a>
+                                    <a href="{{ route('roles.show', ['role' => $role]) }}" class="btn btn-primary">{{ __('View') }}</a>
                                     @endcan
                                     @can('update-role')
                                     <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-primary">{{ __('Edit') }}</a>

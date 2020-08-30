@@ -20,7 +20,7 @@ class SuperUserSeeder extends Seeder
             'email' => config('auth.super_user.email'),
             'name' => 'super',
             'super' => true,
-            'password' => Hash::make(config('auth.super_user.password'))
+            'password' => Hash::make(config('auth.super_user.password')),
         ]);
     }
 }
