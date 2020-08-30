@@ -18,9 +18,9 @@ class AbilitySeeder extends Seeder
      */
     public function run()
     {
-        $deletedAbilities = Ability::whereNotIn('name', $this->abilities)->pluck('id');
-        DB::table('ability_role')->whereIn('ability_id', $deletedAbilities)->delete();
-        Ability::whereIn('id', $deletedAbilities)->delete();
+        $removedAbilities = Ability::whereNotIn('name', $this->abilities)->pluck('id');
+        DB::table('ability_role')->whereIn('ability_id', $removedAbilities)->delete();
+        Ability::whereIn('id', $removedAbilities)->delete();
         $presentAbilities = Ability::whereIn('name', $this->abilities)->get();
         $absentAbilities = $presentAbilities->isEmpty() ? $this->abilities : array_diff($this->abilities, $presentAbilities->pluck('name')->toArray());
         if ($absentAbilities) {

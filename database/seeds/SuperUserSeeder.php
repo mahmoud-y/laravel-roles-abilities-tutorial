@@ -13,9 +13,7 @@ class SuperUserSeeder extends Seeder
      */
     public function run()
     {
-        if (User::where('super', true)->exists()) {
-            User::where('super', true)->delete();
-        }
+        User::where('super', true)->delete();
         User::create([
             'email' => config('auth.super_user.email'),
             'name' => 'super',
