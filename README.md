@@ -4,6 +4,8 @@ Content:
 
 - [Installation](#installation)
 - [Models](#models)
+- [Controllers](#controllers)
+- [Views](#views)
 - [Seeders](#seeders)
 - [Authorization](#authorization)
 - [Conclusion](#conclusion)
@@ -115,6 +117,16 @@ class Ability extends Model
 }
 
 ```
+
+# Controllers
+
+To authorize controller actions we use [authorize](https://laravel.com/docs/7.x/authorization#via-controller-helpers) helper method which accept the name of the ability needed to perform the action
+
+`UserController` and `RoleController` handles management of users and roles including relating users to roles and roles to abilities, the logic is simply made of crud actions and eloquent relationship manipulation
+
+# Views
+
+To display only the portions of the page that users are authorized to utilize we'll use [@can and @canany](https://laravel.com/docs/7.x/authorization#via-blade-templates) blade directives
 
 # Seeders
 
@@ -229,38 +241,6 @@ public function boot()
         }
     });
 }
-```
-
-To authorize controller actions we'll use [authorize](https://laravel.com/docs/7.x/authorization#via-controller-helpers) helper method which accept the name of the ability needed to perform the action
-
-Following is an example from `UserController`
-
-```php
-use App\User;
-
-/**
- * Display a listing of the resource.
- *
- * @return \Illuminate\Http\Response
- */
-public function index()
-{
-    $this->authorize('view-any-user');
-
-    return view('users.index', ['users' => User::whereNull('super')->get()]);
-}
-```
-
-To display only the portions of the page that the user is authorized to utilize we'll use [@can and @canany](https://laravel.com/docs/7.x/authorization#via-blade-templates) blade directives
-
-Following is an example from `app` layout view
-
-```php
-@can('view-any-user')
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
-</li>
-@endcan
 ```
 
 # Conclusion

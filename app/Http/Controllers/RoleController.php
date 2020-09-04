@@ -58,9 +58,7 @@ class RoleController extends Controller
             'abilities' => ['required'],
         ]);
 
-        $role = Role::create([
-            'name' => $validatedData['name'],
-        ]);
+        $role = Role::create(['name' => $validatedData['name']]);
         $role->abilities()->attach($validatedData['abilities']);
         
         return redirect()->route('roles.index');
@@ -108,10 +106,7 @@ class RoleController extends Controller
             'abilities' => ['required'],
         ]);
 
-        $role->fill([
-            'name' => $validatedData['name'],
-        ]);
-        $role->save();
+        $role->fill(['name' => $validatedData['name']])->save();
         $role->abilities()->sync($validatedData['abilities']);
         
         return redirect()->route('roles.index');
