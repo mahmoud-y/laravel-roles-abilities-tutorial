@@ -124,9 +124,7 @@ class UserController extends Controller
         if ($request->filled('password')) {
             $user->password = Hash::make($validatedData['password']);
         }
-        if ($user->isDirty()) {
-            $user->save();
-        }
+        $user->save();
         if ($request->filled('roles')) {
             $user->roles()->sync($validatedData['roles']);
         } elseif ($user->roles()->exists()) {

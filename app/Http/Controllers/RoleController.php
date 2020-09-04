@@ -111,9 +111,7 @@ class RoleController extends Controller
         $role->fill([
             'name' => $validatedData['name'],
         ]);
-        if ($role->isDirty()) {
-            $role->save();
-        }
+        $role->save();
         $role->abilities()->sync($validatedData['abilities']);
         
         return redirect()->route('roles.index');
