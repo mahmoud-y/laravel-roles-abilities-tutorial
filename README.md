@@ -1,4 +1,4 @@
-Authorization is one of laravel security features, it provides a simple way to authorize user actions, in this tutorial we'll use this feature to implement roles and abilities logic.
+[Authorization](https://laravel.com/docs/7.x/authorization) is one of laravel security features, it provides a simple way to authorize user actions, in this tutorial we'll use this feature to implement roles and abilities logic.
 
 Content:
 
@@ -30,12 +30,6 @@ Content:
     ```
 
 - Set database connection environment variable
-- Install npm dependancies and compile assets
-
-    ```
-    npm install && npm run dev
-    ```
-
 - Run migrations and seeds
     
     ```
