@@ -48,7 +48,7 @@ Content:
 
 # Models
 
-`Role` model will group the abilities that will be granted to related users
+`Role` model will group the abilities that will be granted to related users.
 
 ```php
 <?php
@@ -87,7 +87,7 @@ class Role extends Model
 
 ```
 
-`Ability` model represent the actions that needs to be authorized
+`Ability` model represent the actions that needs to be authorized.
 
 ```php
 <?php
@@ -120,13 +120,13 @@ class Ability extends Model
 
 # Controllers
 
-To authorize controller actions we use [authorize](https://laravel.com/docs/7.x/authorization#via-controller-helpers) helper method which accept the name of the ability needed to perform the action
+To authorize controller actions we use [authorize](https://laravel.com/docs/7.x/authorization#via-controller-helpers) helper method which accept the name of the ability needed to perform the action.
 
-`UserController` and `RoleController` handles management of users and roles including relating users to roles and roles to abilities, the logic is simply made of crud actions and eloquent relationship manipulation
+`UserController` and `RoleController` handles management of users and roles including relating users to roles and roles to abilities, the logic is simply made of crud actions and eloquent relationship manipulation.
 
 # Views
 
-To display only the portions of the page that users are authorized to utilize we'll use [@can and @canany](https://laravel.com/docs/7.x/authorization#via-blade-templates) blade directives
+To display only the portions of the page that users are authorized to utilize we'll use [@can and @canany](https://laravel.com/docs/7.x/authorization#via-blade-templates) blade directives.
 
 # Seeders
 
@@ -168,13 +168,13 @@ class AbilitySeeder extends Seeder
 }
 ```
 
-Whenever the abilities are modifed run the following command to sync the database
+Whenever the abilities are modifed run the following command to sync the database.
 
 ```
 php artisan db:seed --class AbilitySeeder
 ```
 
-`SuperUserSeeder` will create a `super` user using credentials provided in `config/auth.php` which can be set using `AUTH_SUPER_USER_EMAIL` and `AUTH_SUPER_USER_EMAIL` environment variable, `super` user surpass authorization logic hence he's granted all abilities
+`SuperUserSeeder` will create a `super` user using credentials provided in `config/auth.php` which can be set using `AUTH_SUPER_USER_EMAIL` and `AUTH_SUPER_USER_EMAIL` environment variable, `super` user surpass authorization logic hence he's granted all abilities.
 
 ```php
 <?php
@@ -203,7 +203,7 @@ class SuperUserSeeder extends Seeder
 }
 ```
 
-Whenever the super user need to be changed, update the correspoding environment variable and run the following command which will delete the current super user and create a new one
+Whenever the super user need to be changed, update the correspoding environment variable and run the following command which will delete the current super user and create a new one.
 
 ```
 php artisan db:seed --class SuperUserSeeder
@@ -211,7 +211,7 @@ php artisan db:seed --class SuperUserSeeder
 
 # Authorization
 
-The authorization take place in `AuthServiceProvider`, where we use [Gate::before](https://laravel.com/docs/7.x/authorization#intercepting-gate-checks) method to intercept gate checks then we verify if the user is super or is granted the ability through any of his roles
+The authorization take place in `AuthServiceProvider`, where we use [Gate::before](https://laravel.com/docs/7.x/authorization#intercepting-gate-checks) method to intercept gate checks then we verify if the user is super or is granted the ability through any of his roles.
 
 ```php
 use Illuminate\Support\Facades\Gate;
@@ -245,4 +245,4 @@ public function boot()
 
 # Conclusion
 
-Laravel has a lot to offer, having a general idea about what's provided help in finding the best solution, in this tutorial we've used `Authorization` and `Seeders` as the base of the roles and abilities system
+Laravel has a lot to offer, having a general idea about what's provided help in finding the best solution, in this tutorial we've used `Authorization` and `Seeders` as the base of the roles and abilities system.
