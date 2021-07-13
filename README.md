@@ -6,7 +6,7 @@ Content:
 - [Models](#models)
 - [Controllers](#controllers)
 - [Views](#views)
-- [Seeders](#seeders)
+- [Commands](#commands)
 - [Authorization](#authorization)
 - [Conclusion](#conclusion)
 
@@ -128,30 +128,51 @@ To authorize controller actions we use [authorize](https://laravel.com/docs/7.x/
 
 To display only the portions of the page that users are authorized to utilize we'll use [@can and @canany](https://laravel.com/docs/7.x/authorization#via-blade-templates) blade directives.
 
-# Seeders
+# Commands
 
-`AbilitySeeder` contain an indexed array of strings where each element is an ability, when exceuted it will sync the abilties in the database.
+`SyncAbilities` contain an indexed array of strings where each element is an ability, when exceuted it will sync the abilties in the database.
 
 ```php
 <?php
 
-use Illuminate\Database\Seeder;
+namespace App\Console\Commands;
+
 use App\Ability;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class AbilitySeeder extends Seeder
+class SyncAbilities extends Command
 {
-    public $abilities = [
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'abilities:sync';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Sync abilities';
+
+    /**
+     * The abilities.
+     *
+     * @var string
+     */
+    protected $abilities = [
         'view-any-user', 'view-user', 'create-user', 'update-user', 'delete-user',
         'view-any-role', 'view-role', 'create-role', 'update-role', 'delete-role',
     ];
-    
+
     /**
-     * Run the database seeds.
+     * Execute the console command.
      *
-     * @return void
+     * @return int
      */
-    public function run()
+    public function handle()
     {
         $removedAbilities = Ability::whereNotIn('name', $this->abilities)->pluck('id');
         DB::table('ability_role')->whereIn('ability_id', $removedAbilities)->delete();
@@ -171,26 +192,42 @@ class AbilitySeeder extends Seeder
 Whenever the abilities are modifed run the following command to sync the database.
 
 ```
-php artisan db:seed --class AbilitySeeder
+php artisan abilities:sync
 ```
 
-`SuperUserSeeder` will create a `super` user using credentials provided in `config/auth.php` which can be set using `AUTH_SUPER_USER_EMAIL` and `AUTH_SUPER_USER_EMAIL` environment variable, `super` user surpass authorization logic hence he's granted all abilities.
+`CreateSuperUser` will create a `super` user using credentials provided in `config/auth.php` which can be set using `AUTH_SUPER_USER_EMAIL` and `AUTH_SUPER_USER_EMAIL` environment variable, `super` user surpass authorization logic hence he's granted all abilities.
 
 ```php
 <?php
 
-use Illuminate\Database\Seeder;
+namespace App\Console\Commands;
+
 use App\User;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
-class SuperUserSeeder extends Seeder
+class CreateSuperUser extends Command
 {
     /**
-     * Run the database seeds.
+     * The name and signature of the console command.
      *
-     * @return void
+     * @var string
      */
-    public function run()
+    protected $signature = 'superuser:create';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create Super User';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
     {
         User::where('super', true)->delete();
         User::create([
@@ -206,7 +243,7 @@ class SuperUserSeeder extends Seeder
 Whenever the super user need to be changed, update the correspoding environment variable and run the following command which will delete the current super user and create a new one.
 
 ```
-php artisan db:seed --class SuperUserSeeder
+php artisan superuser:create
 ```
 
 # Authorization

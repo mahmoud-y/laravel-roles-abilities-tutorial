@@ -1,6 +1,9 @@
 <?php
 
+use App\Ability;
+use App\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,8 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(AbilitySeeder::class);
-        $this->call(SuperUserSeeder::class);
-        $this->call(UserSeeder::class);
+        $user = User::create([
+            'email' => 'user@example.com',
+            'name' => 'user',
+            'password' => Hash::make('secret'),
+        ]);
+        $role = $user->roles()->create(['name' => 'User']);
+        $role->abilities()->attach(Ability::whereIn('name', ['view-any-user', 'view-any-role'])->pluck('id'));
     }
 }

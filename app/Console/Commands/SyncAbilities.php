@@ -1,22 +1,43 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace App\Console\Commands;
+
 use App\Ability;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class AbilitySeeder extends Seeder
+class SyncAbilities extends Command
 {
-    public $abilities = [
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'abilities:sync';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Sync abilities';
+
+    /**
+     * The abilities.
+     *
+     * @var string
+     */
+    protected $abilities = [
         'view-any-user', 'view-user', 'create-user', 'update-user', 'delete-user',
         'view-any-role', 'view-role', 'create-role', 'update-role', 'delete-role',
     ];
-    
+
     /**
-     * Run the database seeds.
+     * Execute the console command.
      *
-     * @return void
+     * @return int
      */
-    public function run()
+    public function handle()
     {
         $removedAbilities = Ability::whereNotIn('name', $this->abilities)->pluck('id');
         DB::table('ability_role')->whereIn('ability_id', $removedAbilities)->delete();
